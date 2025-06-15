@@ -100,8 +100,8 @@ function App() {
           <div className="profile-container">
             <div className="profile-image">
               <img 
-                src="https://placehold.co/200x200/111/facc15?text=DDW" 
-                alt="Donte D. Willis"
+                src="/images/willisempiregroup.png" 
+                alt="Willis Empire Group"
                 className="profile-photo"
               />
               <div className="profile-overlay">
@@ -160,7 +160,8 @@ function App() {
                 title: 'Bin Rich Entertainment',
                 description: 'Independent record label. Full production from studio to streaming. Guitarist, pianist, producer.',
                 icon: '🎵',
-                video: 'https://www.youtube.com/embed/ASA_M211iVo'
+                video: 'https://www.youtube.com/embed/ASA_M211iVo',
+                logo: '/images/binrichlogo.png'
               },
               {
                 title: 'Auto Avenue',
@@ -170,7 +171,9 @@ function App() {
               {
                 title: 'Revenue Ripple',
                 description: 'SaaS platform helping entrepreneurs market like pros. Affiliate program, tutorials, expert courses, and more.',
-                icon: '💡'
+                icon: '💡',
+                logo: '/images/revenue_ripple_icon_transparent.png',
+                link: 'https://revenueripple.org'
               }
             ].map((venture, index) => (
               <li 
@@ -179,9 +182,34 @@ function App() {
                 onMouseEnter={() => setHoveredVenture(index)}
                 onMouseLeave={() => setHoveredVenture(null)}
               >
-                <div className="venture-icon">{venture.icon}</div>
+                <div className="venture-header">
+                  {venture.logo && (
+                    <img 
+                      src={venture.logo} 
+                      alt={`${venture.title} logo`} 
+                      className="venture-logo"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  )}
+                  <div className="venture-icon">{venture.icon}</div>
+                </div>
                 <div className="venture-content">
-                  <strong className="venture-title">{venture.title}</strong>
+                  <strong className="venture-title">
+                    {venture.link ? (
+                      <a 
+                        href={venture.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="venture-link"
+                      >
+                        {venture.title}
+                      </a>
+                    ) : (
+                      venture.title
+                    )}
+                  </strong>
                   <p className="venture-description">{venture.description}</p>
                   {venture.video && (
                     <div className="video-container">

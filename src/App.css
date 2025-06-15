@@ -340,6 +340,11 @@
   border: 3px solid var(--primary);
   box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   transition: all 0.3s ease;
+  background: var(--background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .profile-image:hover {
@@ -350,8 +355,14 @@
 .profile-photo {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.profile-image:hover .profile-photo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 .profile-overlay {
@@ -391,8 +402,12 @@
 
 .venture-icon {
   font-size: 2rem;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   transition: all 0.3s ease;
+}
+
+.venture-item:hover .venture-icon {
+  transform: scale(1.1);
 }
 
 .venture-content {
@@ -605,4 +620,234 @@
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.venture-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.venture-logo {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.venture-item:hover .venture-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.venture-icon {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.venture-item:hover .venture-icon {
+  transform: scale(1.1);
+}
+
+.venture-link {
+  color: var(--primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.venture-link:hover {
+  color: var(--primary-light);
+}
+
+.venture-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.venture-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+
+  .business-card {
+    padding: 1rem;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  .name {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .venture-item {
+    padding: 1rem;
+  }
+
+  .venture-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .venture-logo {
+    height: 40px;
+  }
+
+  .video-container {
+    margin-top: 1rem;
+  }
+
+  .interests-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .interest-item {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-grid {
+    gap: 1rem;
+  }
+
+  .contact-item {
+    padding: 0.75rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .tagline::before,
+  .tagline::after {
+    width: 20px;
+  }
+
+  .tagline::before {
+    left: -30px;
+  }
+
+  .tagline::after {
+    right: -30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .name {
+    font-size: 1.75rem;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .venture-logo {
+    height: 35px;
+  }
+
+  .interests-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .contact-icon {
+    font-size: 1.25rem;
+  }
+
+  .tagline::before,
+  .tagline::after {
+    display: none;
+  }
+}
+
+/* Landscape Mode Optimization */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .section {
+    margin-bottom: 1rem;
+  }
+
+  .venture-item {
+    margin-bottom: 1rem;
+  }
+}
+
+/* High-DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .venture-logo,
+  .profile-photo {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Dark Mode Optimization */
+@media (prefers-color-scheme: dark) {
+  .business-card {
+    background: linear-gradient(135deg, var(--background) 0%, #0a0f1a 100%);
+  }
+
+  .venture-item {
+    background: rgba(59, 130, 246, 0.03);
+  }
+
+  .venture-item:hover {
+    background: rgba(59, 130, 246, 0.08);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .business-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .profile-overlay,
+  .digital-rain,
+  .matrix-break {
+    display: none;
+  }
+
+  .venture-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
 }
