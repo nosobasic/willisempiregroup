@@ -164,9 +164,10 @@ function App() {
                 logo: '/images/binrichlogo.png'
               },
               {
-                title: 'Auto Avenue',
-                description: 'Dropshipping store selling car accessories. Sleek products for street kings.',
-                icon: '🚗'
+                title: 'BinGone',
+                description: 'An online platform that connects people donating clothes with people in need of clothes.',
+                icon: '👕',
+                link: 'https://bingone.co'
               },
               {
                 title: 'Revenue Ripple',
