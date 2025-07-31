@@ -133,6 +133,30 @@ function App() {
         </motion.header>
 
         <motion.section 
+          className="download-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 3.2 }}
+        >
+          <div className="ebook-download">
+            <div className="ebook-content">
+              <h3 className="ebook-title matrix-text">🎯 Free Context Engineering Ebook</h3>
+              <p className="ebook-description">
+                Master the art of context engineering and unlock your full potential. 
+                Learn how to engineer your environment for success and create the life you want.
+              </p>
+              <a 
+                href="/images/downloads/context-engineering-ebook.pdf" 
+                download="Context-Engineering-Ebook.pdf"
+                className="download-button matrix-text"
+              >
+                📥 Download Free Ebook
+              </a>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section 
           ref={aboutRef}
           className={`section ${aboutInView ? 'visible' : ''}`}
           initial={{ opacity: 0, x: -50 }}
