@@ -171,6 +171,36 @@ function App() {
         </motion.section>
 
         <motion.section 
+          className={`section ai-projects-section ${aboutInView ? 'visible' : ''}`}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: aboutInView ? 1 : 0, y: aboutInView ? 0 : 50 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h2 className="section-title matrix-text">🤖 AI & Future Projects</h2>
+          <p className="ai-intro">
+            Helping businesses harness the power of AI to transform their operations and unlock new possibilities. 
+            Here's a look at what I'm building next:
+          </p>
+          <div className="video-showcase">
+            <div className="video-container">
+              <iframe
+                width="100%"
+                height="315"
+                src="https://www.youtube.com/embed/bfyNJSiqTmA"
+                title="Upcoming AI Projects & Business Applications"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+            <div className="video-description">
+              <p>💡 Discover how AI can revolutionize your business operations and drive growth</p>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section 
           ref={venturesRef}
           className={`section right ${venturesInView ? 'visible' : ''}`}
           initial={{ opacity: 0, x: 50 }}

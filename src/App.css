@@ -797,6 +797,70 @@ body {
   transform: scaleX(1);
 }
 
+/* AI Projects Section Styles */
+.ai-projects-section {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  backdrop-filter: blur(10px);
+  margin: 2rem 0;
+  transition: all 0.3s ease;
+}
+
+.ai-projects-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.ai-intro {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.video-showcase {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.video-showcase .video-container {
+  margin-bottom: 1rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.video-showcase .video-container:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+  transform: translateY(-1px);
+}
+
+.video-description {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: all 0.3s ease;
+}
+
+.video-description:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.video-description p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
 /* Media Queries */
 @media screen and (max-width: 768px) {
   #root {
@@ -888,6 +952,19 @@ body {
   .tagline::after {
     right: -30px;
   }
+
+  .ai-projects-section {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .ai-intro {
+    font-size: 1rem;
+  }
+
+  .video-showcase {
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -938,6 +1015,23 @@ body {
   .tagline::before,
   .tagline::after {
     display: none;
+  }
+
+  .ai-projects-section {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .ai-intro {
+    font-size: 0.9rem;
+  }
+
+  .video-description {
+    padding: 0.75rem;
+  }
+
+  .video-description p {
+    font-size: 0.9rem;
   }
 }
 
