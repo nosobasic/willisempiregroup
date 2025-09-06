@@ -288,7 +288,8 @@ function App() {
             {[
               { label: 'Email', href: 'mailto:donte@binrichmediagroup.com', text: 'donte@binrichmediagroup.com', icon: '✉️' },
               { label: 'IG', href: 'https://instagram.com', text: '@tzbinrich', icon: '📸' },
-              { label: 'GitHub', href: 'https://github.com/nosobasic', text: 'github.com/nosobasic', icon: '💻' }
+              { label: 'GitHub', href: 'https://github.com/nosobasic', text: 'github.com/nosobasic', icon: '💻' },
+              { label: 'Substack', href: 'https://nosobasic.substack.com', text: 'nosobasic.substack.com', icon: '📝' }
             ].map((contact, index) => (
               <div key={index} className="contact-item">
                 <span className="contact-icon">{contact.icon}</span>
