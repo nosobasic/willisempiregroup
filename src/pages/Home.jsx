@@ -13,12 +13,12 @@ export default function HomePage() {
 
   const words = ['Entrepreneur', 'Creative Rebel', 'Visionary Coder', 'Freedom Architect', 'SaaS Builder', 'Investor'];
 
-  const [headerRef, headerInView] = useInView({ threshold: 0.1 });
-  const [aboutRef, aboutInView] = useInView({ threshold: 0.1 });
-  const [venturesRef, venturesInView] = useInView({ threshold: 0.1 });
-  const [interestsRef, interestsInView] = useInView({ threshold: 0.1 });
-  const [connectRef, connectInView] = useInView({ threshold: 0.1 });
-  const [footerRef, footerInView] = useInView({ threshold: 0.1 });
+  const [headerRef, headerInView] = useInView({ threshold: 0.3 });
+  const [aboutRef, aboutInView] = useInView({ threshold: 0.3 });
+  const [venturesRef, venturesInView] = useInView({ threshold: 0.3 });
+  const [interestsRef, interestsInView] = useInView({ threshold: 0.3 });
+  const [connectRef, connectInView] = useInView({ threshold: 0.3 });
+  const [footerRef, footerInView] = useInView({ threshold: 0.3 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -157,9 +157,9 @@ export default function HomePage() {
         <motion.section 
           ref={aboutRef}
           className={`section ${aboutInView ? 'visible' : ''}`}
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: aboutInView ? 1 : 0, x: aboutInView ? 0 : -50 }}
-          transition={{ duration: 0.5 }}
+          initial={{ x: -50 }}
+          animate={{ x: aboutInView ? 0 : -30 }}
+          transition={{ duration: 0.8 }}
         >
           <h2 className="section-title matrix-text">About Me</h2>
           <p>
@@ -171,9 +171,9 @@ export default function HomePage() {
         <motion.section 
           ref={venturesRef}
           className={`section right ${venturesInView ? 'visible' : ''}`}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: venturesInView ? 1 : 0, x: venturesInView ? 0 : 50 }}
-          transition={{ duration: 0.5 }}
+          initial={{ x: 50 }}
+          animate={{ x: venturesInView ? 0 : 30 }}
+          transition={{ duration: 0.8 }}
         >
           <h2 className="section-title matrix-text">Ventures</h2>
           <ul className="venture-list">
@@ -257,9 +257,9 @@ export default function HomePage() {
         <motion.section 
           ref={interestsRef}
           className={`section ${interestsInView ? 'visible' : ''}`}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: interestsInView ? 1 : 0, y: interestsInView ? 0 : 50 }}
-          transition={{ duration: 0.5 }}
+          initial={{ y: 50 }}
+          animate={{ y: interestsInView ? 0 : 30 }}
+          transition={{ duration: 0.8 }}
         >
           <h2 className="section-title matrix-text">What I'm Into</h2>
           <div className="interests-grid">
@@ -277,9 +277,9 @@ export default function HomePage() {
         <motion.section 
           ref={connectRef}
           className={`section up connect-section ${connectInView ? 'visible' : ''}`}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: connectInView ? 1 : 0, y: connectInView ? 0 : 50 }}
-          transition={{ duration: 0.5 }}
+          initial={{ y: 50 }}
+          animate={{ y: connectInView ? 0 : 30 }}
+          transition={{ duration: 0.8 }}
         >
           <h2 className="section-title matrix-text">Let's Connect</h2>
           <div className="contact-grid">
