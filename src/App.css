@@ -632,16 +632,16 @@ body {
   height: 100%;
   background: var(--background);
   z-index: 9999;
-  animation: matrixBreak 2s ease-in-out forwards;
+  animation: matrixBreak 0.8s ease-in-out forwards;
   pointer-events: none;
 }
 
 @keyframes matrixBreak {
-  0%, 20%, 40%, 60%, 80% {
+  0%, 30% {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     background: var(--background);
   }
-  30%, 50%, 70%, 90% {
+  50% {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     background: var(--primary);
   }
@@ -680,18 +680,21 @@ body {
 /* Glitch Effect */
 .glitch {
   position: relative;
-  animation: glitch 1s linear infinite;
+  animation: glitch 4s linear infinite;
 }
 
 @keyframes glitch {
-  2%, 64% {
+  0%, 90%, 100% {
+    transform: translate(0, 0) skew(0deg);
+  }
+  92% {
     transform: translate(2px, 0) skew(0deg);
   }
-  4%, 60% {
+  94% {
     transform: translate(-2px, 0) skew(0deg);
   }
-  62% {
-    transform: translate(0, 0) skew(5deg);
+  96% {
+    transform: translate(0, 0) skew(3deg);
   }
 }
 

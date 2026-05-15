@@ -6,40 +6,19 @@ import './App.css';
 
 function App() {
   const [hoveredVenture, setHoveredVenture] = useState(null);
-  const [isVisible, setIsVisible] = useState({});
   const [typingText, setTypingText] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [matrixBreak, setMatrixBreak] = useState(true);
 
   const words = ['Entrepreneur', 'Creative Rebel', 'Visionary Coder', 'Freedom Architect', 'SaaS Builder', 'Investor'];
 
-  // Use react-intersection-observer for better scroll animations
-  const [headerRef, headerInView] = useInView({ threshold: 0.1 });
-  const [aboutRef, aboutInView] = useInView({ threshold: 0.1 });
-  const [venturesRef, venturesInView] = useInView({ threshold: 0.1 });
-  const [interestsRef, interestsInView] = useInView({ threshold: 0.1 });
-  const [connectRef, connectInView] = useInView({ threshold: 0.1 });
-  const [footerRef, footerInView] = useInView({ threshold: 0.1 });
+  const [headerRef, headerInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [aboutRef, aboutInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [venturesRef, venturesInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [interestsRef, interestsInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [connectRef, connectInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const [footerRef, footerInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible((prev) => ({
-            ...prev,
-            [entry.target.id]: entry.isIntersecting,
-          }));
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('section, header, footer').forEach((element) => {
-      observer.observe(element);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (currentWordIndex < words.length) {
@@ -63,10 +42,9 @@ function App() {
   }, [currentWordIndex]);
 
   useEffect(() => {
-    // Matrix break effect
     const timer = setTimeout(() => {
       setMatrixBreak(false);
-    }, 2000);
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -78,7 +56,7 @@ function App() {
         className="business-card"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 2 }}
+        transition={{ duration: 0.6, delay: 0.9 }}
       >
         <div className="background-glow" />
         
@@ -93,7 +71,7 @@ function App() {
             className="tagline matrix-text"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.5 }}
+            transition={{ delay: 1.2 }}
           >
             I make my own rules
           </motion.div>
@@ -106,7 +84,7 @@ function App() {
               />
               <div className="profile-overlay">
                 <div className="profile-social">
-                  <a href="https://instagram.com" className="social-icon glitch">📸</a>
+                  <a href="https://instagram.com/tzbinrich" className="social-icon glitch">📸</a>
                   <a href="https://github.com/nosobasic" className="social-icon glitch">💻</a>
                   <a href="mailto:donte@binrichmediagroup.com" className="social-icon glitch">✉️</a>
                 </div>
@@ -117,7 +95,7 @@ function App() {
             className="name matrix-text"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.7 }}
+            transition={{ delay: 1.4 }}
           >
             Donte D. Willis
           </motion.h1>
@@ -125,7 +103,7 @@ function App() {
             className="title matrix-text"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.9 }}
+            transition={{ delay: 1.6 }}
           >
             {typingText}
             <span className="cursor">|</span>
@@ -136,7 +114,7 @@ function App() {
           className="download-section"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 3.2 }}
+          transition={{ duration: 0.5, delay: 1.8 }}
         >
           <div className="ebook-download">
             <div className="ebook-content">
@@ -189,7 +167,7 @@ function App() {
                 src="https://www.youtube.com/embed/bfyNJSiqTmA"
                 title="Upcoming AI Projects & Business Applications"
                 frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
@@ -274,7 +252,7 @@ function App() {
                         src={venture.video}
                         title="Dont3eezy ft JonGram - Danger (official music video)"
                         frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerPolicy="strict-origin-when-cross-origin"
                         allowFullScreen
                       />
@@ -317,7 +295,7 @@ function App() {
           <div className="contact-grid">
             {[
               { label: 'Email', href: 'mailto:donte@binrichmediagroup.com', text: 'donte@binrichmediagroup.com', icon: '✉️' },
-              { label: 'IG', href: 'https://instagram.com', text: '@tzbinrich', icon: '📸' },
+              { label: 'IG', href: 'https://instagram.com/tzbinrich', text: '@tzbinrich', icon: '📸' },
               { label: 'GitHub', href: 'https://github.com/nosobasic', text: 'github.com/nosobasic', icon: '💻' },
               { label: 'Substack', href: 'https://nosobasic.substack.com', text: 'nosobasic.substack.com', icon: '📝' }
             ].map((contact, index) => (
