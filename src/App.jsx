@@ -108,6 +108,17 @@ function App() {
             {typingText}
             <span className="cursor">|</span>
           </motion.p>
+          <motion.a
+            href="https://d2gapjlfb5j1wy.cloudfront.net"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="download-button header-roadmap-cta"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.05 }}
+          >
+            Cloud Engineering Roadmap
+          </motion.a>
         </motion.header>
 
         <motion.section 
