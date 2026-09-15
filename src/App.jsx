@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaGithub, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import './App.css';
+import RoadmapTimeline from './components/RoadmapTimeline';
+import { ROADMAP_URL } from './data/roadmapProgress';
 
 function App() {
   const [hoveredVenture, setHoveredVenture] = useState(null);
@@ -109,7 +111,7 @@ function App() {
             <span className="cursor">|</span>
           </motion.p>
           <motion.a
-            href="https://d2gapjlfb5j1wy.cloudfront.net"
+            href={ROADMAP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="download-button header-roadmap-cta"
@@ -119,6 +121,7 @@ function App() {
           >
             Cloud Engineering Roadmap
           </motion.a>
+          <RoadmapTimeline />
         </motion.header>
 
         <motion.section 
@@ -305,7 +308,7 @@ function App() {
           <h2 className="section-title matrix-text">Let's Connect</h2>
           <div className="contact-grid">
             {[
-              { label: 'Email', href: 'mailto:donte@binrichmediagroup.com', text: 'donte@binrichmediagroup.com', icon: '✉️' },
+              { label: 'Email', href: 'mailto:nosobasic@duck.com', text: 'nosobasic@duck.com', icon: '✉️' },
               { label: 'IG', href: 'https://instagram.com/tzbinrich', text: '@tzbinrich', icon: '📸' },
               { label: 'GitHub', href: 'https://github.com/nosobasic', text: 'github.com/nosobasic', icon: '💻' },
               { label: 'Substack', href: 'https://nosobasic.substack.com', text: 'nosobasic.substack.com', icon: '📝' }
