@@ -163,6 +163,35 @@ function App() {
         </motion.section>
 
         <motion.section 
+          className={`section certifications-section ${aboutInView ? 'visible' : ''}`}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: aboutInView ? 1 : 0, y: aboutInView ? 0 : 50 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
+          <h2 className="section-title matrix-text">🏆 Certifications</h2>
+          <div className="certifications-grid">
+            <div className="certification-badge">
+              <img 
+                src="/images/aws-saa-badge.png" 
+                alt="AWS Solutions Architect Associate Badge"
+                className="badge-image"
+              />
+              <h3 className="badge-title">AWS Solutions Architect</h3>
+              <p className="badge-subtitle">Associate</p>
+            </div>
+            <div className="certification-badge">
+              <img 
+                src="/images/terraform-associate-badge.svg" 
+                alt="HashiCorp Terraform Associate Badge"
+                className="badge-image"
+              />
+              <h3 className="badge-title">HashiCorp Terraform</h3>
+              <p className="badge-subtitle">Associate</p>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section 
           className={`section ai-projects-section ${aboutInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: aboutInView ? 1 : 0, y: aboutInView ? 0 : 50 }}
