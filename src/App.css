@@ -282,7 +282,7 @@ body {
 }
 
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   transition: all 0.5s ease;
 }
 
@@ -901,6 +901,209 @@ body {
   transform: scaleX(1);
 }
 
+/* What I'm Building Section Styles */
+.building-section {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  backdrop-filter: blur(10px);
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.building-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.category-section {
+  margin-bottom: 2.5rem;
+}
+
+.category-section:last-child {
+  margin-bottom: 0;
+}
+
+.category-header {
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.category-intro {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.venture-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.venture-item-compact {
+  padding: 1.25rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  transition: all 0.3s ease;
+}
+
+.venture-item-compact:hover {
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  border-color: var(--primary);
+}
+
+.venture-compact-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.venture-logo-small {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  border-radius: 6px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.venture-icon-small {
+  font-size: 1.8rem;
+}
+
+.venture-link-compact {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.venture-link-compact:hover {
+  color: var(--primary-light);
+}
+
+.venture-description-compact {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.venture-item-featured {
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  transition: all 0.3s ease;
+}
+
+.venture-item-featured:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--primary);
+}
+
+.venture-featured-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.venture-logo-featured {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  flex-shrink: 0;
+}
+
+.venture-title-featured {
+  color: var(--primary);
+  font-size: 1.2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.ebook-cta {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(139, 92, 246, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.ebook-cta:hover {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: var(--accent);
+}
+
+.ebook-title-compact {
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.ebook-description-compact {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 1rem 0;
+}
+
+.download-button-compact {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+}
+
+.download-button-compact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+  background: var(--accent-light);
+}
+
+.interests-simplified {
+  padding: 1rem;
+  margin: 1.5rem 0;
+}
+
+.interests-statement {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-style: italic;
+  margin: 0;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
 /* Certifications Section Styles */
 .certifications-section {
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
@@ -1183,6 +1386,45 @@ body {
   .badge-subtitle {
     font-size: 0.85rem;
   }
+
+  .building-section {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .category-section {
+    margin-bottom: 2rem;
+  }
+
+  .category-header {
+    font-size: 1.2rem;
+  }
+
+  .venture-category-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .venture-item-compact {
+    padding: 1rem;
+  }
+
+  .venture-featured-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .venture-logo-featured {
+    height: 50px;
+  }
+
+  .ebook-cta {
+    padding: 1.25rem;
+  }
+
+  .interests-statement {
+    font-size: 0.95rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -1277,6 +1519,69 @@ body {
 
   .badge-subtitle {
     font-size: 0.8rem;
+  }
+
+  .building-section {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .category-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .category-header {
+    font-size: 1.1rem;
+  }
+
+  .category-intro {
+    font-size: 0.9rem;
+  }
+
+  .venture-item-compact {
+    padding: 0.9rem;
+  }
+
+  .venture-link-compact {
+    font-size: 1rem;
+  }
+
+  .venture-description-compact {
+    font-size: 0.9rem;
+  }
+
+  .venture-item-featured {
+    padding: 1rem;
+  }
+
+  .venture-logo-featured {
+    height: 40px;
+  }
+
+  .venture-title-featured {
+    font-size: 1.1rem;
+  }
+
+  .ebook-cta {
+    padding: 1rem;
+  }
+
+  .ebook-title-compact {
+    font-size: 1.1rem;
+  }
+
+  .ebook-description-compact {
+    font-size: 0.9rem;
+  }
+
+  .download-button-compact {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  .interests-statement {
+    font-size: 0.9rem;
+    padding: 0.75rem;
   }
 }
 

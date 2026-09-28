@@ -124,29 +124,6 @@ function App() {
           <RoadmapTimeline />
         </motion.header>
 
-        <motion.section 
-          className="download-section"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.8 }}
-        >
-          <div className="ebook-download">
-            <div className="ebook-content">
-              <h3 className="ebook-title matrix-text">🎯 Free Context Engineering Ebook</h3>
-              <p className="ebook-description">
-                Master the art of context engineering and unlock your full potential. 
-                Learn how to engineer your environment for success and create the life you want.
-              </p>
-              <a 
-                href="/images/downloads/context-engineering-ebook.pdf" 
-                download="Context-Engineering-Ebook.pdf"
-                className="download-button matrix-text"
-              >
-                📥 Download Free Ebook
-              </a>
-            </div>
-          </div>
-        </motion.section>
 
         <motion.section 
           ref={aboutRef}
@@ -157,8 +134,9 @@ function App() {
         >
           <h2 className="section-title matrix-text">About Me</h2>
           <p>
-            Multi-business owner with a vision to live without financial restrictions. From the open road to tech, music,
-            and marketing—I build, hustle, and grow. Based in Long Island, NY, I'm all about leveling up mentally, physically, and financially.
+            Multi-business owner and cloud engineer with a vision to live without financial restrictions. 
+            I leverage cutting-edge tech skills to build scalable ventures—from SaaS platforms to AI-powered solutions. 
+            Based in Long Island, NY, I'm all about leveling up mentally, physically, and financially while creating products that make a real impact.
           </p>
         </motion.section>
 
@@ -192,17 +170,96 @@ function App() {
         </motion.section>
 
         <motion.section 
-          className={`section ai-projects-section ${aboutInView ? 'visible' : ''}`}
+          ref={venturesRef}
+          className={`section building-section ${venturesInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: aboutInView ? 1 : 0, y: aboutInView ? 0 : 50 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          animate={{ opacity: venturesInView ? 1 : 0, y: venturesInView ? 0 : 50 }}
+          transition={{ duration: 0.5 }}
         >
-          <h2 className="section-title matrix-text">🤖 AI & Future Projects</h2>
-          <p className="ai-intro">
-            Helping businesses harness the power of AI to transform their operations and unlock new possibilities. 
-            Here's a look at what I'm building next:
-          </p>
-          <div className="video-showcase">
+          <h2 className="section-title matrix-text">What I'm Building</h2>
+          
+          {/* Tech Ventures Category */}
+          <div className="category-section">
+            <h3 className="category-header">💻 Tech Ventures</h3>
+            <div className="venture-category-grid">
+              <div className="venture-item-compact">
+                <div className="venture-compact-header">
+                  <img 
+                    src="/images/revenue_ripple_icon_transparent.png" 
+                    alt="Revenue Ripple logo" 
+                    className="venture-logo-small"
+                  />
+                  <a 
+                    href="https://revenueripple.org" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="venture-link-compact"
+                  >
+                    <strong>Revenue Ripple</strong>
+                  </a>
+                </div>
+                <p className="venture-description-compact">
+                  SaaS platform empowering entrepreneurs with marketing tools, affiliate programs, and expert courses.
+                </p>
+              </div>
+              
+              <div className="venture-item-compact">
+                <div className="venture-compact-header">
+                  <span className="venture-icon-small">👕</span>
+                  <a 
+                    href="https://bingone.co" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="venture-link-compact"
+                  >
+                    <strong>BinGone</strong>
+                  </a>
+                </div>
+                <p className="venture-description-compact">
+                  Online platform connecting clothing donors with people in need, making charitable giving simple and impactful.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Creative Work Category */}
+          <div className="category-section">
+            <h3 className="category-header">🎵 Creative Work</h3>
+            <div className="venture-item-featured">
+              <div className="venture-featured-header">
+                <img 
+                  src="/images/binrichlogo.png" 
+                  alt="Bin Rich Entertainment logo" 
+                  className="venture-logo-featured"
+                />
+                <div>
+                  <strong className="venture-title-featured">Bin Rich Entertainment</strong>
+                  <p className="venture-description-compact">
+                    Independent record label offering full production from studio to streaming. Guitarist, pianist, and producer.
+                  </p>
+                </div>
+              </div>
+              <div className="video-container">
+                <iframe
+                  width="100%"
+                  height="315"
+                  src="https://www.youtube.com/embed/ASA_M211iVo"
+                  title="Dont3eezy ft JonGram - Danger (official music video)"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* AI & Cloud Innovation Category */}
+          <div className="category-section">
+            <h3 className="category-header">🤖 AI & Cloud Innovation</h3>
+            <p className="category-intro">
+              Helping businesses harness AI to transform operations and unlock new possibilities.
+            </p>
             <div className="video-container">
               <iframe
                 width="100%"
@@ -215,116 +272,32 @@ function App() {
                 allowFullScreen
               />
             </div>
-            <div className="video-description">
-              <p>💡 Discover how AI can revolutionize your business operations and drive growth</p>
+            <div className="ebook-cta">
+              <h4 className="ebook-title-compact">🎯 Free Context Engineering Ebook</h4>
+              <p className="ebook-description-compact">
+                Master the art of context engineering and unlock your full potential.
+              </p>
+              <a 
+                href="/images/downloads/context-engineering-ebook.pdf" 
+                download="Context-Engineering-Ebook.pdf"
+                className="download-button-compact"
+              >
+                📥 Download Free
+              </a>
             </div>
           </div>
         </motion.section>
 
         <motion.section 
-          ref={venturesRef}
-          className={`section right ${venturesInView ? 'visible' : ''}`}
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: venturesInView ? 1 : 0, x: venturesInView ? 0 : 50 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="section-title matrix-text">Ventures</h2>
-          <ul className="venture-list">
-            {[
-              {
-                title: 'Bin Rich Entertainment',
-                description: 'Independent record label. Full production from studio to streaming. Guitarist, pianist, producer.',
-                icon: '🎵',
-                video: 'https://www.youtube.com/embed/ASA_M211iVo',
-                logo: '/images/binrichlogo.png'
-              },
-              {
-                title: 'BinGone',
-                description: 'An online platform that connects people donating clothes with people in need of clothes.',
-                icon: '👕',
-                link: 'https://bingone.co'
-              },
-              {
-                title: 'Revenue Ripple',
-                description: 'SaaS platform helping entrepreneurs market like pros. Affiliate program, tutorials, expert courses, and more.',
-                icon: '💡',
-                logo: '/images/revenue_ripple_icon_transparent.png',
-                link: 'https://revenueripple.org'
-              }
-            ].map((venture, index) => (
-              <li 
-                key={index}
-                className="venture-item"
-                onMouseEnter={() => setHoveredVenture(index)}
-                onMouseLeave={() => setHoveredVenture(null)}
-              >
-                <div className="venture-header">
-                  {venture.logo && (
-                    <img 
-                      src={venture.logo} 
-                      alt={`${venture.title} logo`} 
-                      className="venture-logo"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  )}
-                  <div className="venture-icon">{venture.icon}</div>
-                </div>
-                <div className="venture-content">
-                  <strong className="venture-title">
-                    {venture.link ? (
-                      <a 
-                        href={venture.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="venture-link"
-                      >
-                        {venture.title}
-                      </a>
-                    ) : (
-                      venture.title
-                    )}
-                  </strong>
-                  <p className="venture-description">{venture.description}</p>
-                  {venture.video && (
-                    <div className="video-container">
-                      <iframe
-                        width="100%"
-                        height="315"
-                        src={venture.video}
-                        title="Dont3eezy ft JonGram - Danger (official music video)"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                      />
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </motion.section>
-
-        <motion.section 
           ref={interestsRef}
-          className={`section ${interestsInView ? 'visible' : ''}`}
+          className={`section interests-simplified ${interestsInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: interestsInView ? 1 : 0, y: interestsInView ? 0 : 50 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="section-title matrix-text">What I'm Into</h2>
-          <div className="interests-grid">
-            <div className="interest-item">💼 Business</div>
-            <div className="interest-item">🏠 Real Estate</div>
-            <div className="interest-item">📈 Investing</div>
-            <div className="interest-item">💻 Tech</div>
-            <div className="interest-item">💪 Working Out</div>
-            <div className="interest-item">🧘‍♂️ Meditation</div>
-            <div className="interest-item">📚 Reading</div>
-            <div className="interest-item">🎯 Growth</div>
-          </div>
+          <p className="interests-statement">
+            When I'm not building: Real estate investing, fitness, meditation, and continuous growth 🎯
+          </p>
         </motion.section>
 
         <motion.section 
