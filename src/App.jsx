@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion as Motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FaGithub, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import './App.css';
 import RoadmapTimeline from './components/RoadmapTimeline';
 import { ROADMAP_URL } from './data/roadmapProgress';
 
+function DeferredVideo(props) {
+  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: '200px' });
+  return <iframe {...props} ref={ref} src={inView ? props.src : undefined} />;
+}
+
+const words = ['Entrepreneur', 'Creative Rebel', 'Visionary Coder', 'Freedom Architect', 'SaaS Builder', 'Investor'];
+
 function App() {
-  const [hoveredVenture, setHoveredVenture] = useState(null);
   const [typingText, setTypingText] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [matrixBreak, setMatrixBreak] = useState(true);
 
-  const words = ['Entrepreneur', 'Creative Rebel', 'Visionary Coder', 'Freedom Architect', 'SaaS Builder', 'Investor'];
 
   const [headerRef, headerInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [aboutRef, aboutInView] = useInView({ threshold: 0.1, triggerOnce: true });
@@ -26,6 +30,7 @@ function App() {
     if (currentWordIndex < words.length) {
       const currentWord = words[currentWordIndex];
       let charIndex = 0;
+      let nextWordTimeout;
 
       const typingInterval = setInterval(() => {
         if (charIndex <= currentWord.length) {
@@ -33,20 +38,23 @@ function App() {
           charIndex++;
         } else {
           clearInterval(typingInterval);
-          setTimeout(() => {
+          nextWordTimeout = setTimeout(() => {
             setCurrentWordIndex((prev) => (prev + 1) % words.length);
           }, 1000);
         }
       }, 100);
 
-      return () => clearInterval(typingInterval);
+      return () => {
+        clearInterval(typingInterval);
+        clearTimeout(nextWordTimeout);
+      };
     }
   }, [currentWordIndex]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setMatrixBreak(false);
-    }, 800);
+    }, 200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -54,34 +62,36 @@ function App() {
     <>
       {matrixBreak && <div className="matrix-break" />}
       <div className="digital-rain" />
-      <motion.div 
+      <Motion.div
         className="business-card"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.9 }}
+        transition={{ duration: 0.3 }}
       >
         <div className="background-glow" />
         
-        <motion.header 
+        <Motion.header
           ref={headerRef}
           className={`header ${headerInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: headerInView ? 1 : 0, y: headerInView ? 0 : -20 }}
           transition={{ duration: 0.5 }}
         >
-          <motion.div 
+          <Motion.div
             className="tagline matrix-text"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.1 }}
           >
             I make my own rules
-          </motion.div>
+          </Motion.div>
           <div className="profile-container">
             <div className="profile-image">
               <img 
-                src="/images/willisempiregroup.png" 
+                src="/images/willisempiregroup-400.png"
                 alt="Willis Empire Group"
+                fetchPriority="high"
+                decoding="async"
                 className="profile-photo"
               />
               <div className="profile-overlay">
@@ -93,39 +103,39 @@ function App() {
               </div>
             </div>
           </div>
-          <motion.h1 
+          <Motion.h1
             className="name matrix-text"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
+            transition={{ delay: 0.1 }}
           >
             Donte D. Willis
-          </motion.h1>
-          <motion.p 
+          </Motion.h1>
+          <Motion.p
             className="title matrix-text"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.6 }}
+            transition={{ delay: 0.1 }}
           >
             {typingText}
             <span className="cursor">|</span>
-          </motion.p>
-          <motion.a
+          </Motion.p>
+          <Motion.a
             href={ROADMAP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="download-button header-roadmap-cta"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 3.05 }}
+            transition={{ delay: 0.1 }}
           >
             Cloud Engineering Roadmap
-          </motion.a>
+          </Motion.a>
           <RoadmapTimeline />
-        </motion.header>
+        </Motion.header>
 
 
-        <motion.section 
+        <Motion.section
           ref={aboutRef}
           className={`section ${aboutInView ? 'visible' : ''}`}
           initial={{ opacity: 0, x: -50 }}
@@ -138,9 +148,9 @@ function App() {
             I leverage cutting-edge tech skills to build scalable ventures—from SaaS platforms to AI-powered solutions. 
             Based in Long Island, NY, I'm all about leveling up mentally, physically, and financially while creating products that make a real impact.
           </p>
-        </motion.section>
+        </Motion.section>
 
-        <motion.section 
+        <Motion.section
           className={`section certifications-section ${aboutInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: aboutInView ? 1 : 0, y: aboutInView ? 0 : 50 }}
@@ -153,6 +163,8 @@ function App() {
                 src="/images/aws-saa-badge.png" 
                 alt="AWS Solutions Architect Associate Badge"
                 className="badge-image"
+                loading="lazy"
+                decoding="async"
               />
               <h3 className="badge-title">AWS Solutions Architect</h3>
               <p className="badge-subtitle">Associate</p>
@@ -162,14 +174,16 @@ function App() {
                 src="/images/terraform-associate-badge.svg" 
                 alt="HashiCorp Terraform Associate Badge"
                 className="badge-image"
+                loading="lazy"
+                decoding="async"
               />
               <h3 className="badge-title">HashiCorp Terraform</h3>
               <p className="badge-subtitle">Associate</p>
             </div>
           </div>
-        </motion.section>
+        </Motion.section>
 
-        <motion.section 
+        <Motion.section
           ref={venturesRef}
           className={`section building-section ${venturesInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
@@ -231,6 +245,8 @@ function App() {
                   src="/images/binrichlogo.png" 
                   alt="Bin Rich Entertainment logo" 
                   className="venture-logo-featured"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div>
                   <strong className="venture-title-featured">Bin Rich Entertainment</strong>
@@ -240,7 +256,7 @@ function App() {
                 </div>
               </div>
               <div className="video-container">
-                <iframe
+                <DeferredVideo
                   width="100%"
                   height="315"
                   src="https://www.youtube.com/embed/ASA_M211iVo"
@@ -261,7 +277,7 @@ function App() {
               Helping businesses harness AI to transform operations and unlock new possibilities.
             </p>
             <div className="video-container">
-              <iframe
+              <DeferredVideo
                 width="100%"
                 height="315"
                 src="https://www.youtube.com/embed/bfyNJSiqTmA"
@@ -286,9 +302,9 @@ function App() {
               </a>
             </div>
           </div>
-        </motion.section>
+        </Motion.section>
 
-        <motion.section 
+        <Motion.section
           ref={interestsRef}
           className={`section interests-simplified ${interestsInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
@@ -298,9 +314,9 @@ function App() {
           <p className="interests-statement">
             When I'm not building: Real estate investing, fitness, meditation, and continuous growth 🎯
           </p>
-        </motion.section>
+        </Motion.section>
 
-        <motion.section 
+        <Motion.section
           ref={connectRef}
           className={`section up connect-section ${connectInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 50 }}
@@ -324,9 +340,9 @@ function App() {
               </div>
             ))}
           </div>
-        </motion.section>
+        </Motion.section>
 
-        <motion.footer 
+        <Motion.footer
           ref={footerRef}
           className={`footer ${footerInView ? 'visible' : ''}`}
           initial={{ opacity: 0, y: 20 }}
@@ -334,8 +350,8 @@ function App() {
           transition={{ duration: 0.5 }}
         >
           <p>&copy; {new Date().getFullYear()} Donte D. Willis. All rights reserved.</p>
-        </motion.footer>
-      </motion.div>
+        </Motion.footer>
+      </Motion.div>
     </>
   );
 }

@@ -4,9 +4,9 @@
 export const ROADMAP_URL = 'https://d2gapjlfb5j1wy.cloudfront.net'
 
 export const ROADMAP_PROGRESS = {
-  done: 6,
+  done: 8,
   total: 30,
-  percent: 20,
+  percent: 27,
   currentPhaseId: 'phase-2',
   phases: [
     { id: 'phase-1', number: '01', shortLabel: 'SAA', status: 'complete' },

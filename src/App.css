@@ -733,7 +733,7 @@ body {
   height: 100%;
   background: var(--background);
   z-index: 9999;
-  animation: matrixBreak 0.8s ease-in-out forwards;
+  animation: matrixBreak 0.2s ease-in-out forwards;
   pointer-events: none;
 }
 
