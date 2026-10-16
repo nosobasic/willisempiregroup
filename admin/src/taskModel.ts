@@ -67,3 +67,22 @@ export function freshness(value: unknown, now = Date.now()) {
       ? "Needs refresh"
       : "Checked within 7 days";
 }
+
+/** Describe recorded provenance without promoting a source report to fresh verification. */
+export function completionLabel(task: Record<string, unknown>): string {
+  const record = task.source_record as Record<string, unknown> | null;
+  if (!record) return task.completion_verified_at ? "Completion verified" : "Verification not recorded";
+  if (record.status !== "completed") return "Completion recorded after import";
+  const labels: Record<string, string> = {
+    user_reported: "Completion reported by owner",
+    reported_live_verification: "Source reports live verification",
+    reported_site_confirmation: "Source reports site confirmation",
+    reported_verification: "Source reports verification",
+    reported_email_verification: "Source reports email verification",
+    user_report_and_later_tracker_check: "Owner report with source-reported tracker check",
+    reported_tracker_check: "Source reports tracker check",
+    reported_site_and_email_confirmation: "Source reports site and email confirmation",
+    reported_provider_confirmation: "Source reports provider confirmation",
+  };
+  return labels[String(record.completion_basis)] || "Completion reported in source; basis unrecognized";
+}

@@ -2,7 +2,7 @@ import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
-import { validateTask, freshness } from "../admin/src/taskModel";
+import { validateTask, freshness, completionLabel } from "../admin/src/taskModel";
 const db = new PGlite();
 const owner = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
   other = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
@@ -38,6 +38,9 @@ before(async () => {
     `insert into public.tasks(organization_id,title,source_system,source_id) values('${org}','Synthetic task','fixture','one') returning id`,
   );
   id = r.rows[0].id;
+  await db.exec("reset role");
+  await db.exec(readFileSync("supabase/migrations/202610160003_evidence_history.sql", "utf8"));
+  await as(owner);
 });
 after(() => db.close());
 test("owner-private tasks: another owner in same org cannot read or modify", async () => {
@@ -299,4 +302,44 @@ test("reviewed import is atomic, owner-private and repeat-safe without fabricate
  await as(viewer);await assert.rejects(call(),/Owner access required/);
  await as(other);assert.equal((await db.query("select id from public.tasks where source_id='synthetic-import'")).rows.length,0);
  await db.exec("reset role; set role anon");await assert.rejects(call(),/permission denied/);
+});
+
+
+test("completion labels preserve the distinction between reports and fresh verification", () => {
+  for (const [basis,label] of Object.entries({user_reported:"Completion reported by owner",reported_live_verification:"Source reports live verification",reported_site_confirmation:"Source reports site confirmation"}))
+    assert.equal(completionLabel({source_record:{status:"completed",completion_basis:basis}}),label);
+  assert.match(completionLabel({source_record:{status:"completed",completion_basis:"future_basis"}}),/unrecognized/);
+  assert.equal(completionLabel({source_record:{status:"open"},completion_summary:"New check"}),"Completion recorded after import");
+  assert.equal(completionLabel({completion_verified_at:"2026-10-16"}),"Completion verified");
+});
+
+test("evidence snapshots preserve prior values, never backfill, and remain owner-private", async () => {
+  await as(owner);
+  const historical=(await db.query<{evidence_before:null;evidence_after:null}>("select evidence_before,evidence_after from public.task_events where task_id=$1 and action='Created'",[id])).rows[0];
+  assert.deepEqual(historical,{evidence_before:null,evidence_after:null});
+  const row=(await db.query<{id:string}>("insert into public.tasks(organization_id,title,source_url,uncertainty) values($1,'Evidence snapshot fixture','https://example.com/first','Original uncertainty') returning id",[org])).rows[0];
+  await db.query("update public.tasks set source_url='https://example.com/second',uncertainty='New uncertainty' where id=$1",[row.id]);
+  await db.query("update public.tasks set source_url=null where id=$1",[row.id]);
+  const events=(await db.query<{evidence_before:Record<string,unknown>|null;evidence_after:Record<string,unknown>}>("select evidence_before,evidence_after from public.task_events where task_id=$1 order by created_at,id",[row.id])).rows;
+  const created=events.find(e=>e.evidence_before===null)!;
+  assert.equal(created.evidence_after.source_url,'https://example.com/first');
+  const changed=events.find(e=>e.evidence_after.source_url==='https://example.com/second')!;
+  assert.equal(changed.evidence_before?.source_url,'https://example.com/first');
+  assert.equal(changed.evidence_before?.uncertainty,'Original uncertainty');
+  assert.equal(changed.evidence_after.uncertainty,'New uncertainty');
+  const cleared=events.find(e=>e.evidence_after.source_url===null)!;
+  assert.equal(cleared.evidence_before?.source_url,'https://example.com/second');
+  assert.equal('title' in created.evidence_after,false);
+  await db.query("update public.tasks set status='Done',completion_summary='First completion evidence',completion_url='https://example.com/completed' where id=$1",[row.id]);
+  await db.query("update public.tasks set completion_summary='Corrected completion evidence',approval_status='Approved',approval_scope='Synthetic scope',approval_evidence='https://example.com/approval' where id=$1",[row.id]);
+  const latest=(await db.query<{evidence_before:Record<string,unknown>;evidence_after:Record<string,unknown>}>("select evidence_before,evidence_after from public.task_events where task_id=$1 and evidence_after->>'completion_summary'='Corrected completion evidence'",[row.id])).rows[0];
+  assert.equal(latest.evidence_before.completion_summary,'First completion evidence');
+  assert.equal(latest.evidence_after.completion_summary,'Corrected completion evidence');
+  assert.equal(latest.evidence_before.approval_evidence,null);
+  assert.equal(latest.evidence_after.approval_evidence,'https://example.com/approval');
+
+  await assert.rejects(db.query("update public.task_events set evidence_before='{}' where task_id=$1",[row.id]),/permission denied/);
+  await as(other); assert.equal((await db.query("select id from public.task_events where task_id=$1",[row.id])).rows.length,0);
+  await as(viewer); assert.equal((await db.query("select id from public.task_events where task_id=$1",[row.id])).rows.length,0);
+  await db.exec("reset role;set role anon"); await assert.rejects(db.query("select evidence_after from public.task_events"),/permission denied/);
 });

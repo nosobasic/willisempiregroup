@@ -3,7 +3,7 @@ import { FiPlus, FiArrowUpRight, FiCheckCircle, FiClock } from "react-icons/fi";
 import type { Workspace, Task, Row } from "./domain";
 import { safeURL } from "./domain";
 import type { Entity } from "./forms";
-import { statusLabel, functionBuckets, freshness } from "./taskModel";
+import { statusLabel, functionBuckets, freshness, completionLabel } from "./taskModel";
 const groups = [
   "Active",
   "Needs approval",
@@ -299,16 +299,14 @@ export function TaskBoard({
                   {t.status === "Done" && (
                     <div className="work-complete">
                       <strong>
-                        {t.source_record ? "Completion reported in source" : t.completion_verified_at
-                          ? "Completion verified"
-                          : "Verification not recorded"}
+                        {completionLabel(t)}
                       </strong>
                       <p>{text(t.completion_summary)}</p>
                       <EvidenceLink
                         value={t.completion_url}
                         label="Completion evidence"
                       />
-                      {!t.source_record && <small>{time(t.completion_verified_at)}</small>}
+                      {t.source_record ? <small>Source basis: {text(source(t).completion_basis) || "Not recorded"}. Original source evidence is retained below; this is not a fresh service verification.</small> : <small>{time(t.completion_verified_at)}</small>}
                     </div>
                   )}
                   {Boolean(t.source_record) && <details className="work-history"><summary>Source record & evidence</summary><p>Original reviewed record; later manual edits appear above. Dates retain their original precision. Evidence IDs are references, not invented links.</p><pre className="source-detail">{JSON.stringify({record:t.source_record,evidence:t.source_evidence},null,2)}</pre></details>}
@@ -316,7 +314,7 @@ export function TaskBoard({
                     <summary>Activity history ({history.length})</summary>
                     {history.length ? (
                       history.map((e) => (
-                        <p key={e.id}>
+                        <div key={e.id}>
                           <strong>{text(e.action)}</strong> ·{" "}
                           {time(e.created_at)}
                           <br />
@@ -329,7 +327,8 @@ export function TaskBoard({
                               {(e.changed_fields as string[]).join(", ")}
                             </small>
                           )}
-                        </p>
+                          {e.evidence_after != null ? <details><summary>Evidence recorded at this change</summary><pre className="source-detail">{JSON.stringify({before: e.evidence_before ?? null, after: e.evidence_after}, null, 2)}</pre></details> : <small>Evidence values were not captured for this historical event.</small>}
+                        </div>
                       ))
                     ) : (
                       <p>No recorded activity yet.</p>
