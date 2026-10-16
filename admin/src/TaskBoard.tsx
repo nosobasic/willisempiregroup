@@ -19,6 +19,14 @@ const groupOf = (t: Task) =>
       ? "Active"
       : t.status;
 const text = (v: unknown) => String(v ?? "");
+const source = (t: Task) => (t.source_record ?? {}) as Record<string, unknown>;
+const held = (t: Task) => source(t).on_hold === true;
+function sourceDate(v: unknown): string {
+ if (!v) return "Not recorded";
+ if (typeof v === "string") return v;
+ const d=v as Record<string,unknown>;
+ return [d.date || d.local, d.timezone, d.basis].filter(Boolean).join(" · ");
+}
 function time(v: unknown) {
   if (!v) return "Not recorded";
   const d = new Date(String(v));
@@ -90,8 +98,8 @@ export function TaskBoard({
         (!bucket || t.function_bucket === bucket) &&
         (filter === "All" ||
           (filter === "All active"
-            ? !["Done", "Cancelled"].includes(t.status)
-            : groupOf(t) === filter)) &&
+            ? !["Done", "Cancelled"].includes(t.status) && !held(t)
+            : filter === "On hold" ? held(t) : groupOf(t) === filter)) &&
         (!project || t.project === project) &&
         [t.title, t.project, t.next_action, t.waiting_on].some((v) =>
           text(v).toLowerCase().includes(query.toLowerCase()),
@@ -148,7 +156,7 @@ export function TaskBoard({
           <label>
             Status
             <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-              {["All active", ...groups, "All"].map((g) => (
+              {["All active", ...groups, "On hold", "All"].map((g) => (
                 <option key={g}>{g}</option>
               ))}
             </select>
@@ -212,14 +220,16 @@ export function TaskBoard({
                   </div>
                   <h2>{t.title}</h2>
                   <p className="work-meta">
-                    Owner: You · {text(t.function_bucket) || "Business admin"} ·{" "}
+                    Private owner: You · {text(t.function_bucket) || "Business admin"} ·{" "}
                     {text(t.project) ||
                       data.businesses.find((b) => b.id === t.business_id)
                         ?.name ||
                       "WEG workspace"}
                   </p>
+                  {Boolean(source(t).owner) && <p className="work-meta">Proposed assignee: {text(source(t).owner)} · {source(t).review_needed ? "Needs review" : "Reviewed source"}</p>}
+                  {held(t) && <p className="on-hold">On hold · excluded from the active queue</p>}
                   <p className="work-freshness">
-                    {freshness(t.last_verified_at)}
+                    {source(t).last_verified_at ? `Conversation evidence dated ${text(source(t).last_verified_at)}` : freshness(t.last_verified_at)}
                     {t.uncertainty ? ` · ${text(t.uncertainty)}` : ""}
                   </p>
                   {Boolean(t.dependencies) && (
@@ -246,15 +256,15 @@ export function TaskBoard({
                       <dt>
                         <FiClock /> Due
                       </dt>
-                      <dd>{time(t.due_at || t.due_date)}</dd>
+                      <dd>{t.due_at || t.due_date ? time(t.due_at || t.due_date) : sourceDate(source(t).due_at)}</dd>
                     </div>
                     <div className={overdue ? "overdue" : ""}>
                       <dt>Follow-up</dt>
-                      <dd>{time(t.follow_up_at)}</dd>
+                      <dd>{t.follow_up_at ? time(t.follow_up_at) : sourceDate(source(t).follow_up_at)}</dd>
                     </div>
                     <div>
                       <dt>Last checked</dt>
-                      <dd>{time(t.last_verified_at)}</dd>
+                      <dd>{t.last_verified_at ? time(t.last_verified_at) : sourceDate(source(t).last_verified_at)}</dd>
                     </div>
                     <div>
                       <dt>Updated</dt>
@@ -289,7 +299,7 @@ export function TaskBoard({
                   {t.status === "Done" && (
                     <div className="work-complete">
                       <strong>
-                        {t.completion_verified_at
+                        {t.source_record ? "Completion reported in source" : t.completion_verified_at
                           ? "Completion verified"
                           : "Verification not recorded"}
                       </strong>
@@ -298,9 +308,10 @@ export function TaskBoard({
                         value={t.completion_url}
                         label="Completion evidence"
                       />
-                      <small>{time(t.completion_verified_at)}</small>
+                      {!t.source_record && <small>{time(t.completion_verified_at)}</small>}
                     </div>
                   )}
+                  {Boolean(t.source_record) && <details className="work-history"><summary>Source record & evidence</summary><p>Original reviewed record; later manual edits appear above. Dates retain their original precision. Evidence IDs are references, not invented links.</p><pre className="source-detail">{JSON.stringify({record:t.source_record,evidence:t.source_evidence},null,2)}</pre></details>}
                   <details className="work-history">
                     <summary>Activity history ({history.length})</summary>
                     {history.length ? (
@@ -356,13 +367,14 @@ export function ActionQueue({
     Low: 3,
   };
   const active = data.tasks.filter(
-    (t) => !["Done", "Cancelled"].includes(t.status),
+    (t) => !["Done", "Cancelled"].includes(t.status) && !held(t),
   );
   const ready = active.filter(
     (t) => ["Open", "In progress"].includes(t.status) && !t.dependencies,
   );
   ready.sort(
     (a, b) =>
+      Number(source(a).user_priority_order || 99) - Number(source(b).user_priority_order || 99) ||
       (priority[a.priority] ?? 3) - (priority[b.priority] ?? 3) ||
       text(a.follow_up_at || a.due_at || "9999").localeCompare(
         text(b.follow_up_at || b.due_at || "9999"),
@@ -401,7 +413,7 @@ export function ActionQueue({
                   <strong>{t.title}</strong>
                   <p>{text(t.next_action) || "Record the next action"}</p>
                   <small>
-                    {statusLabel(t.status)} · {freshness(t.last_verified_at)}
+                    {statusLabel(t.status)} · {source(t).last_verified_at ? `Conversation evidence dated ${text(source(t).last_verified_at)}` : freshness(t.last_verified_at)}
                   </small>
                   {Boolean(t.dependencies) && (
                     <small>Depends on: {text(t.dependencies)}</small>

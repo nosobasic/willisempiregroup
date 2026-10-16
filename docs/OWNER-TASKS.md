@@ -50,3 +50,14 @@ Before any future database CI/automatic deployment, verify that the live schema 
 This reconciliation has NOT been run. It is unnecessary for the current website build with DB deployment disabled. If future execution requires a new CLI login, database password, access grant, integration enablement or paid plan, stop for the corresponding owner action/approval; do not copy browser sessions or generate service credentials. Source: https://supabase.com/docs/reference/cli/supabase-migration-repair
 
 After the owner creates their account, verify exactly one approved email match, bootstrap only its UUID, configure the exact production Auth URLs and public client environment values, and run hosted auth/isolation/persistence checks. Deploy only after those pass. No task inventory is seeded by this release.
+
+
+## Release verification 2026-10-16 (latest)
+
+The recovered working tree includes homepage-matched navy/blue styling and a reviewed inventory importer with an additive third migration, `202610160002_reviewed_inventory.sql`. The live database already has this import extension and 60 source records; do not replay it. The private input stays outside Git and static assets. Its size is 58182 UTF-8 bytes and SHA-256 is `4acada464927c5bebe5df88d0178b73b9bba84438285d3b1c1525b1651f9d566`. Source records/evidence, original date precision, uncertainty and hold flags remain preserved; imported completion is explicitly source-reported. No ongoing source refresh exists.
+
+Fresh checks: typecheck, lint, combined production build, 25 domain/PostgreSQL tests and 24 desktop/mobile browser tests pass. Desktop authenticated UI and mobile fixture screenshots reviewed. Public src/public/index.html have no changes from production ed8b355.
+
+Real hosted owner session: updated the dashboard task to in progress and reloaded successfully; created a synthetic persistence record and verified it after server restart/reload, then cancelled it to retain audit history outside active work. Hosted read-only audit confirmed all public tables have RLS, one membership, 60 matching imported source records, no anon SELECT privilege; simulated authenticated nonmember sees zero tasks. Audit query: https://supabase.com/dashboard/project/iikciaznwrrkplhbatae/sql/5bac9c05-a046-495e-b1ab-43427a505449 . Nonmember check uses SQL role/JWT simulation, not a second real Auth login.
+
+Supabase production deployment and automatic branching freshly confirmed OFF. Remote main remains ed8b355 and contains no .github workflows or supabase files. Vercel build/output overrides are disabled, so vercel.json selects build:all and dist. Production publication and live route checks are pending this release.

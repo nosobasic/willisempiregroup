@@ -23,7 +23,7 @@ export function validateTask(v: Record<string, unknown>): string | null {
   const has = (key: string) => Boolean(String(v[key] ?? "").trim());
   if (
     v.status === "Done" &&
-    (!has("completion_summary") || !has("completion_url"))
+    (!has("completion_summary") || (!has("completion_url") && !(v.source_record && Array.isArray(v.source_evidence) && v.source_evidence.length)))
   )
     return "Completed work needs a verification summary and evidence link.";
   if (v.status === "Waiting on response" && !has("waiting_on"))

@@ -19,7 +19,7 @@ before(async () => {
   await db.exec(
     `create role anon nologin; create role authenticated nologin; create schema auth; create table auth.users(id uuid primary key); create table auth.mfa_factors(id uuid primary key default gen_random_uuid(),user_id uuid,status text); create function auth.jwt() returns jsonb language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claims',true),''),'{}')::jsonb $$; create function auth.uid() returns uuid language sql stable as $$ select (auth.jwt()->>'sub')::uuid $$; grant usage on schema public,auth to authenticated,anon; grant execute on function auth.uid(),auth.jwt() to authenticated,anon;`,
   );
-  for (const f of ["202609230001_weg_os.sql", "202610160001_owner_tasks.sql"])
+  for (const f of ["202609230001_weg_os.sql", "202610160001_owner_tasks.sql", "202610160002_reviewed_inventory.sql"])
     await db.exec(readFileSync(`supabase/migrations/${f}`, "utf8"));
   await db.exec(
     `insert into auth.users values('${owner}'),('${other}'),('${viewer}');`,
@@ -280,4 +280,23 @@ test("source identity trims whitespace and rejects incomplete or colliding impor
   );
   assert.equal(rows.rows[0].source_system, null);
   assert.equal(rows.rows[0].source_id, null);
+});
+
+test("reviewed import is atomic, owner-private and repeat-safe without fabricated timestamps", async () => {
+ await as(owner);
+ const record={id:"synthetic-import",title:"Synthetic reported completion",status:"completed",function_bucket:"education",priority:"normal",completion_basis:"user_reported",evidence:["Sentinel_fixture"],last_verified_at:"2026-10-01",on_hold:false};
+ const evidence=[{message_id:"Sentinel_fixture",recorded_at:"2026-10-01T12:00:00Z",author:"user"}];
+ const args=[org,"a".repeat(64),JSON.stringify([record]),JSON.stringify(evidence)];
+ const call=()=>db.query<{result:{inserted:number;unchanged:number}}>("select public.import_reviewed_inventory($1,$2,$3::jsonb,$4::jsonb) result",args);
+ assert.deepEqual((await call()).rows[0].result,{inserted:1,unchanged:0});
+ const row=(await db.query<{id:string;completed_at:null;completion_verified_at:null;last_verified_at:null}>("select * from public.tasks where source_id='synthetic-import'")).rows[0];
+ assert.equal(row.completed_at,null);assert.equal(row.completion_verified_at,null);assert.equal(row.last_verified_at,null);
+ await db.query("update public.tasks set title='Manual edit' where id=$1",[row.id]);
+ assert.deepEqual((await call()).rows[0].result,{inserted:0,unchanged:1});
+ assert.equal((await db.query<{title:string}>("select title from public.tasks where id=$1",[row.id])).rows[0].title,"Manual edit");
+ await assert.rejects(db.query("select public.import_reviewed_inventory($1,$2,$3::jsonb,$4::jsonb)",[org,"a".repeat(64),JSON.stringify([{...record,id:"atomic-new"},{...record,title:"conflict"}]),JSON.stringify(evidence)]),/Source conflict/);
+ assert.equal((await db.query("select id from public.tasks where source_id='atomic-new'")).rows.length,0);
+ await as(viewer);await assert.rejects(call(),/Owner access required/);
+ await as(other);assert.equal((await db.query("select id from public.tasks where source_id='synthetic-import'")).rows.length,0);
+ await db.exec("reset role; set role anon");await assert.rejects(call(),/permission denied/);
 });

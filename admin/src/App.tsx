@@ -19,6 +19,7 @@ import { RecordForm, type Entity } from "./forms";
 import { Dashboard, Pipeline, Portfolio, Mentors } from "./views";
 import { OpportunityDetail } from "./OpportunityDetail";
 import { Settings } from "./Settings";
+import { InventoryImport } from "./InventoryImport";
 import { TaskBoard, TaskSummary, ActionQueue } from "./TaskBoard";
 const nav = [
   { path: "dashboard", label: "Dashboard", icon: FiGrid },
@@ -609,7 +610,7 @@ function WorkspaceApp({
           ) : segment === "portfolio" ? (
             <Portfolio data={data} edit={canEdit ? edit : undefined} />
           ) : segment === "tasks" ? (
-            <TaskBoard data={data} edit={canEdit ? edit : undefined} />
+            <><InventoryImport orgId={orgId} refresh={refresh}/><TaskBoard data={data} edit={canEdit ? edit : undefined} /></>
           ) : segment === "settings" ? (
             <Settings
               user={user}

@@ -265,7 +265,7 @@ export function RecordForm({
                   : null);
     }
     if (entity === "tasks") {
-      const problem = validateTask(values);
+      const problem = validateTask({ ...record, ...values });
       if (problem) {
         setError(problem);
         return;
