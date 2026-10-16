@@ -204,3 +204,80 @@ test("form checks and freshness never imply automated verification", () => {
     "Needs refresh",
   );
 });
+
+test("owner extension denies same-org nonowners across every operational table", async () => {
+  await as(viewer);
+  for (const table of [
+    "organizations",
+    "organization_members",
+    "businesses",
+    "opportunities",
+    "mentors",
+    "tasks",
+    "task_events",
+    "company_profiles",
+    "application_answers",
+  ]) {
+    assert.equal(
+      (await db.query(`select * from public.${table}`)).rows.length,
+      0,
+      table,
+    );
+  }
+  for (const table of ["businesses", "opportunities", "mentors", "tasks"]) {
+    assert.equal(
+      (
+        await db.query(
+          `update public.${table} set organization_id='${org}' returning id`,
+        )
+      ).rows.length,
+      0,
+    );
+  }
+});
+test("owner task links cannot cross organizations, even when owner belongs to both", async () => {
+  const biz = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
+  const opp = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
+  await db.exec(
+    `reset role; insert into public.organization_members(organization_id,user_id,role) values('${org2}','${owner}','owner'); insert into public.businesses(id,organization_id,name) values('${biz}','${org2}','Other fixture'); insert into public.opportunities(id,organization_id,name,category) values('${opp}','${org2}','Other fixture','Grant');`,
+  );
+  await as(owner);
+  await assert.rejects(
+    db.exec(`update public.tasks set business_id='${biz}' where id='${id}'`),
+    /foreign key/,
+  );
+  await assert.rejects(
+    db.exec(`update public.tasks set opportunity_id='${opp}' where id='${id}'`),
+    /foreign key/,
+  );
+  await assert.rejects(
+    db.exec(
+      `insert into public.tasks(organization_id,title,business_id) values('${org}','cross link','${biz}')`,
+    ),
+    /foreign key/,
+  );
+});
+
+test("source identity trims whitespace and rejects incomplete or colliding import identities", async () => {
+  await as(owner);
+  await assert.rejects(
+    db.exec(
+      `insert into public.tasks(organization_id,title,source_system,source_id) values('${org}','duplicate padded',' fixture ',' one ')`,
+    ),
+    /unique constraint/,
+  );
+  await assert.rejects(
+    db.exec(
+      `insert into public.tasks(organization_id,title,source_system,source_id) values('${org}','incomplete','fixture','  ')`,
+    ),
+    /source_pair/,
+  );
+  await db.exec(
+    `insert into public.tasks(organization_id,title,source_system,source_id) values('${org}','manual blank','  ','  ')`,
+  );
+  const rows = await db.query<{ source_system: null; source_id: null }>(
+    `select source_system,source_id from public.tasks where title='manual blank'`,
+  );
+  assert.equal(rows.rows[0].source_system, null);
+  assert.equal(rows.rows[0].source_id, null);
+});

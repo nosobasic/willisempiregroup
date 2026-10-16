@@ -41,7 +41,7 @@ before(async () => {
       owner,
     ),
   );
-  // Bootstrap can be re-run without duplicating portfolio records.
+  // Bootstrap can be re-run without duplicating the empty owner workspace.
   await db.exec(
     readFileSync("supabase/bootstrap.sql", "utf8").replace(
       "00000000-0000-0000-0000-000000000000",
@@ -52,6 +52,9 @@ before(async () => {
     `insert into public.organizations(id,name) values('${other}','Other organization'); insert into public.organization_members(organization_id,user_id,role) values('${other}','${outsider}','owner'),('${org}','${viewer}','viewer'),('${org}','${operator}','operator');`,
   );
   await as(owner);
+  await db.exec(
+    `insert into public.businesses(id,organization_id,name) values('${business}','${org}','Synthetic portfolio fixture')`,
+  );
   await db.exec(
     `insert into public.opportunities(id,organization_id,business_id,name,category) values('${opp}','${org}','${business}','TEST FIXTURE — funding program','Grant'); insert into public.tasks(organization_id,title,opportunity_id) values('${org}','TEST FIXTURE — prepare','${opp}'); insert into public.mentors(organization_id,name) values('${org}','TEST FIXTURE — mentor'); insert into public.application_answers(organization_id,opportunity_id,question) values('${org}','${opp}','TEST FIXTURE — question');`,
   );
@@ -69,7 +72,7 @@ test("all sensitive tables have RLS enabled", async () => {
 });
 test("owner can access owned workspace and only its initial portfolio", async () => {
   await as(owner);
-  assert.equal(await count("businesses"), 4);
+  assert.equal(await count("businesses"), 1);
   assert.equal(await count("organizations"), 1);
   assert.equal(await count("opportunities"), 1);
 });

@@ -45,6 +45,8 @@ create policy personal_tasks on public.tasks as restrictive for all to authentic
 revoke delete on public.tasks from authenticated;
 create function private.guard_task() returns trigger language plpgsql set search_path='' as $$
 begin
+ new.source_system=nullif(btrim(new.source_system),'');
+ new.source_id=nullif(btrim(new.source_id),'');
  if TG_OP='UPDATE' then
   if new.owner_id<>old.owner_id then raise exception 'Task owner cannot be changed'; end if;
   new.version=old.version+1;

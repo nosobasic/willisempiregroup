@@ -32,7 +32,9 @@ An unattended assistant writer is NOT implemented. It would require a separately
 ## Verification so far
 
 - TypeScript, ESLint and combined production build pass.
-- 21 domain/database tests pass, including five new owner-task tests.
+- 24 domain/database tests pass, including eight owner-task tests. Migrations execute in PGlite (PostgreSQL compiled to WASM), with actual roles, RLS, constraints and triggers. Supabase auth.uid()/jwt() and MFA catalog are local fixtures; hosted Auth and PostgREST remain separate verification gates.
 - Supported Mac-browser fixture checks: active view hides completed; completed count selects one completed record; blocked update fails without reason; supplying reason updates counts; 390px layout has no horizontal overflow.
-- Browser regression test source has been adapted to /admin, evidence-based completion and denied viewer access; the automated browser suite has not yet been run in this execution session.
+- All 24 Playwright cases pass (12 desktop, 12 mobile) using the existing installed Chrome and synthetic HTTP mocks: protected deep links, login/session/logout, invalid/expired tokens, nonmembers/viewers, MFA challenge, password reset/recovery, opportunity-to-task workflow, evidence-based completion, search/profile/portfolio, and overflow checks. Two initial timing failures were fixed by waiting for authenticated navigation and save-dialog closure. Screenshots are in ignored test-results/owner-{dashboard,tasks}-{desktop,mobile}.png.
+- Combined artifact/config checks pass for public root, nine admin paths, all referenced asset files, missing-asset exclusions and no preview bundle. Public JS/CSS are byte-identical to the existing performance-release build. This is not a hosted Vercel routing test.
+- Source identity trims surrounding whitespace before uniqueness checks. Blank pairs become null; partial or duplicate identities fail. Optimistic conflict protection uses a version predicate in the UI; direct clients must supply the predicate too. The planned import RPC remains unimplemented.
 - Live Supabase authentication, production persistence and deployed RLS remain pending owner setup.

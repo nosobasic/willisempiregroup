@@ -234,6 +234,7 @@ async function mock(page: Page, options: MockOptions = {}) {
   return tables;
 }
 async function navigate(page: Page, name: string) {
+  await expect(page.getByRole("navigation")).toBeAttached();
   const button = page.getByRole("button", { name: "Open navigation" });
   if (await button.isVisible()) await button.click();
   await page
@@ -403,6 +404,7 @@ test("opportunity to fit, application, linked task, and outcome workflow", async
     .getByLabel("Completion evidence link", { exact: true })
     .fill("https://example.com/verified");
   await page.getByRole("button", { name: "Save record" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   await page
     .getByRole("combobox", { name: "Status", exact: true })
     .selectOption("Completed");
@@ -492,4 +494,36 @@ test("password recovery validates confirmation, saves, and signs out", async ({
   await expect(
     page.getByRole("button", { name: "Sign in", exact: true }),
   ).toBeVisible();
+});
+
+test("owner dashboard and task views fit the viewport", async ({
+  page,
+}, testInfo) => {
+  await mock(page, { loggedIn: true, empty: true });
+  await page.goto("/admin/dashboard");
+  await expect(
+    page.getByRole("heading", { name: "Your game plan" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: `test-results/owner-dashboard-${testInfo.project.name}.png`,
+    fullPage: true,
+  });
+  await navigate(page, "Tasks");
+  await expect(
+    page.getByRole("heading", { name: "Tasks & next actions" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: `test-results/owner-tasks-${testInfo.project.name}.png`,
+    fullPage: true,
+  });
 });
