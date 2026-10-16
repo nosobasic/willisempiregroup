@@ -1,0 +1,61 @@
+{
+  "buildCommand": "npm run build:all",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/dashboard",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/tasks",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/settings",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/reset-password",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/capital/:path*",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/admin/portfolio/:path*",
+      "destination": "/admin/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/admin/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ]
+}

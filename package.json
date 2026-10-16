@@ -7,11 +7,20 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:admin": "vite --config vite.admin.config.ts",
+    "build:admin": "tsc --noEmit && vite build --config vite.admin.config.ts",
+    "preview:admin": "vite preview --config vite.admin.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:browser": "playwright test",
+    "dev:preview": "vite --config vite.preview.config.ts",
+    "build:all": "npm run build && npm run build:admin"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@supabase/supabase-js": "^2.117.1",
     "framer-motion": "^12.16.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -19,7 +28,10 @@
     "react-intersection-observer": "^9.16.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "@eslint/js": "^9.25.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.2",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
@@ -29,7 +41,11 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "postcss": "^8.5.4",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4.1.8",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.0",
+    "typescript-eslint": "^8.70.1",
     "vite": "^6.3.5"
   }
 }
