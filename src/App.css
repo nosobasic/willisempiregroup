@@ -1663,3 +1663,10 @@ body {
     animation: none;
   }
 }
+
+/* Keep the page-wide sheen static during desktop scrolling. */
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  .business-card::before {
+    animation: none;
+  }
+}
