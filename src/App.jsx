@@ -180,6 +180,16 @@ function App() {
               <h3 className="badge-title">HashiCorp Terraform</h3>
               <p className="badge-subtitle">Associate</p>
             </div>
+            <div className="certification-badge">
+              <div className="badge-image badge-symbol" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" width="56" height="56">
+                  <path d="M24 5 39 11v11c0 9-6 16-15 21C15 38 9 31 9 22V11l15-6Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
+                  <path d="m17 24 5 5 10-11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <h3 className="badge-title">ITIL® 4 Foundation</h3>
+              <p className="badge-subtitle">IT Service Management · PeopleCert</p>
+            </div>
           </div>
         </Motion.section>
 
