@@ -1663,17 +1663,3 @@ body {
     animation: none;
   }
 }
-
-/* Avoid moving or repainting the entire page-sized card on desktop hover. */
-@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
-  .business-card {
-    transition: none;
-  }
-
-  .business-card:hover {
-    transform: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3),
-                0 0 20px rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.1);
-  }
-}
